@@ -30,6 +30,8 @@ export default function AIAssistant() {
     setResult(null)
 
     try {
+      console.log('Sending request to improve text:', { text: inputText, improvementType })
+      
       const response = await fetch('/api/ai/improve', {
         method: 'POST',
         headers: {
@@ -41,7 +43,9 @@ export default function AIAssistant() {
         }),
       })
 
+      console.log('Response status:', response.status)
       const data = await response.json()
+      console.log('Response data:', data)
 
       if (data.success) {
         setResult(data)
@@ -49,6 +53,7 @@ export default function AIAssistant() {
         setError(data.error || 'שגיאה בשיפור הטקסט')
       }
     } catch (err) {
+      console.error('Error in handleImprove:', err)
       setError('שגיאה בחיבור לשרת')
     } finally {
       setIsGenerating(false)

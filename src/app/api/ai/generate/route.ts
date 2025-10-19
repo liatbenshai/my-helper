@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 import { z } from 'zod'
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || '',
 })
 
 const GenerateRequestSchema = z.object({
@@ -16,6 +16,13 @@ const GenerateRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { success: false, error: 'OpenAI API key לא מוגדר' },
+        { status: 500 }
+      )
+    }
+
     const body = await request.json()
     const { prompt, textType, context, style, length } = GenerateRequestSchema.parse(body)
 

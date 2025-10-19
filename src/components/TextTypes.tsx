@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   ScaleIcon, 
@@ -104,6 +105,42 @@ const textTypes = [
 ]
 
 export default function TextTypes() {
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generatedText, setGeneratedText] = useState('')
+  const [selectedType, setSelectedType] = useState('')
+
+  const handleGenerateExample = async (textType: string, example: string) => {
+    setIsGenerating(true)
+    setSelectedType(textType)
+    
+    try {
+      const response = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: `צור ${example} מקצועי`,
+          textType: textType,
+          style: 'professional',
+          length: 'medium'
+        }),
+      })
+
+      const data = await response.json()
+      
+      if (data.success) {
+        setGeneratedText(data.text)
+      } else {
+        setGeneratedText('שגיאה ביצירת הטקסט: ' + data.error)
+      }
+    } catch (err) {
+      setGeneratedText('שגיאה בחיבור לשרת')
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -149,19 +186,39 @@ export default function TextTypes() {
                 <h4 className="text-sm font-medium text-gray-700 hebrew-text">דוגמאות:</h4>
                 <div className="flex flex-wrap gap-2">
                   {type.examples.map((example, exampleIndex) => (
-                    <span
+                    <button
                       key={exampleIndex}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hebrew-text"
+                      onClick={() => handleGenerateExample(type.title.toLowerCase().includes('משפט') ? 'legal' : 
+                                                         type.title.toLowerCase().includes('עסק') ? 'business' :
+                                                         type.title.toLowerCase().includes('אקדמ') ? 'academic' :
+                                                         type.title.toLowerCase().includes('יצירת') ? 'creative' :
+                                                         type.title.toLowerCase().includes('טכני') ? 'technical' : 'business', example)}
+                      disabled={isGenerating}
+                      className="px-3 py-1 bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 rounded-full text-sm hebrew-text transition-colors disabled:opacity-50"
                     >
                       {example}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>
               
-              <button className="mt-4 w-full btn-primary text-sm">
-                התחל לכתוב
-              </button>
+              {generatedText && selectedType === type.title && (
+                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <h5 className="text-sm font-medium text-green-700 mb-2 hebrew-text">טקסט שנוצר:</h5>
+                  <p className="text-gray-800 text-sm hebrew-text leading-relaxed">
+                    {generatedText}
+                  </p>
+                </div>
+              )}
+              
+              {isGenerating && selectedType === type.title && (
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <span className="text-blue-700 text-sm hebrew-text">יוצר טקסט...</span>
+                  </div>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
