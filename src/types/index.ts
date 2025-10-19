@@ -23,7 +23,7 @@ export interface LearningData {
   improvementType: ImprovementType
   originalText: string
   improvedText: string
-  feedback: string
+  feedback?: string
   rating: number
   createdAt: string
 }

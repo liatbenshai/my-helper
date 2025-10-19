@@ -1,7 +1,6 @@
 'use client'
 
 import { ButtonHTMLAttributes, forwardRef } from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -29,7 +28,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     return (
-      <motion.button
+      <button
         ref={ref}
         className={cn(
           baseClasses,
@@ -38,15 +37,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           className
         )}
         disabled={disabled || loading}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
         {...props}
       >
         {loading && (
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2" />
         )}
         {children}
-      </motion.button>
+      </button>
     )
   }
 )

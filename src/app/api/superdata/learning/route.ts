@@ -8,8 +8,9 @@ const SaveLearningDataSchema = z.object({
   improvementType: z.string(),
   originalText: z.string().min(1),
   improvedText: z.string().min(1),
-  feedback: z.string().optional(),
-  rating: z.number().min(1).max(5)
+  feedback: z.string().default(''),
+  rating: z.number().min(1).max(5),
+  createdAt: z.string()
 })
 
 // GET /api/superdata/learning - Get learning data for user
@@ -47,12 +48,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const learningData = SaveLearningDataSchema.parse({
+    const learningData = {
       ...body,
+      feedback: body.feedback || '',
       createdAt: new Date().toISOString()
-    })
+    }
 
-    const savedData = await superdataClient.saveLearningData(learningData)
+    const validatedData = SaveLearningDataSchema.parse(learningData)
+    const savedData = await superdataClient.saveLearningData(validatedData)
 
     return NextResponse.json({
       success: true,
