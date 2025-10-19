@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { superdataClient } from '@/lib/superdata'
+import { supabaseClient } from '@/lib/supabase'
 import { z } from 'zod'
 
 const UpdateTextSchema = z.object({
   title: z.string().min(1).optional(),
   content: z.string().min(1).optional(),
-  textType: z.string().optional(),
-  style: z.string().optional(),
+  textType: z.enum(['legal', 'business', 'academic', 'creative', 'technical']).optional(),
+  style: z.enum(['formal', 'casual', 'professional', 'persuasive']).optional(),
   tags: z.array(z.string()).optional(),
   metadata: z.record(z.any()).optional()
 })
@@ -26,7 +26,7 @@ export async function GET(
       )
     }
 
-    const text = await superdataClient.getTextById(id)
+    const text = await supabaseClient.getTextById(id)
 
     return NextResponse.json({
       success: true,
@@ -59,7 +59,7 @@ export async function PATCH(
       )
     }
 
-    const updatedText = await superdataClient.updateText(id, updates)
+    const updatedText = await supabaseClient.updateText(id, updates)
 
     return NextResponse.json({
       success: true,
@@ -96,7 +96,7 @@ export async function DELETE(
       )
     }
 
-    await superdataClient.deleteText(id)
+    await supabaseClient.deleteText(id)
 
     return NextResponse.json({
       success: true,

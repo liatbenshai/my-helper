@@ -6,8 +6,8 @@
   "devCommand": "npm run dev",
   "env": {
     "OPENAI_API_KEY": "@openai_api_key",
-    "SUPERDATA_API_KEY": "@superdata_api_key",
-    "SUPERDATA_DATABASE_ID": "@superdata_database_id",
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_ANON_KEY": "@supabase_anon_key",
     "NEXT_PUBLIC_APP_URL": "@next_public_app_url",
     "NODE_ENV": "production"
   }

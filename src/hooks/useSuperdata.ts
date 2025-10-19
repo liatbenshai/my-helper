@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { TextRecord, LearningData } from '@/lib/superdata'
+import { TextRecord, LearningData } from '@/lib/supabase'
 
 export interface UseSuperdataState {
   isLoading: boolean

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { superdataClient } from '@/lib/superdata'
+import { supabaseClient } from '@/lib/supabase'
 import { z } from 'zod'
 
 const SaveLearningDataSchema = z.object({
   userId: z.string().min(1),
   textId: z.string().min(1),
-  improvementType: z.string(),
+  improvementType: z.enum(['grammar', 'style', 'clarity', 'professional', 'comprehensive']),
   originalText: z.string().min(1),
   improvedText: z.string().min(1),
   feedback: z.string().default(''),
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const learningData = await superdataClient.getLearningData(userId, limit)
+    const learningData = await supabaseClient.getLearningData(userId, limit)
 
     return NextResponse.json({
       success: true,
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     }
 
     const validatedData = SaveLearningDataSchema.parse(learningData)
-    const savedData = await superdataClient.saveLearningData(validatedData)
+    const savedData = await supabaseClient.saveLearningData(validatedData)
 
     return NextResponse.json({
       success: true,

@@ -24,7 +24,7 @@
 - אנימציות חלקות עם Framer Motion
 
 ### ☁️ אחסון בענן
-- שילוב עם Superdata לאחסון נתונים
+- שילוב עם Supabase לאחסון נתונים
 - שמירה אוטומטית של טקסטים
 - מעקב אחר התקדמות ולמידה
 - ניתוחים ותובנות
@@ -42,7 +42,7 @@
 ### Backend
 - **Next.js API Routes** - API endpoints
 - **OpenAI GPT-4** - AI מתקדם לכתיבה
-- **Superdata** - אחסון נתונים בענן
+- **Supabase** - אחסון נתונים בענן
 - **Axios** - בקשות HTTP
 
 ### DevOps
@@ -77,12 +77,12 @@ cp env.example .env.local
 ```
 
 ערוך את הקובץ `.env.local` והוסף את המפתחות שלך:
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-SUPERDATA_API_KEY=your_superdata_api_key_here
-SUPERDATA_DATABASE_ID=your_database_id_here
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
+   ```env
+   OPENAI_API_KEY=your_openai_api_key_here
+   SUPABASE_URL=your_supabase_url_here
+   SUPABASE_ANON_KEY=your_supabase_anon_key_here
+   NEXT_PUBLIC_APP_URL=http://localhost:3001
+   ```
 
 4. **הפעלת השרת**
 ```bash
@@ -99,7 +99,10 @@ http://localhost:3001
 #### Vercel (מומלץ)
 1. התחבר ל-[Vercel](https://vercel.com)
 2. ייבא את הפרויקט מ-GitHub
-3. הוסף את משתני הסביבה ב-Vercel Dashboard
+3. הוסף את משתני הסביבה ב-Vercel Dashboard:
+   - `OPENAI_API_KEY`
+   - `SUPABASE_URL`
+   - `SUPABASE_ANON_KEY`
 4. הפרויקט יעלה אוטומטית!
 
 #### Netlify

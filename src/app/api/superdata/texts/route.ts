@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { superdataClient, TextRecord } from '@/lib/superdata'
+import { supabaseClient, TextRecord } from '@/lib/supabase'
 import { z } from 'zod'
 
 const CreateTextSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(1),
-  textType: z.string(),
-  style: z.string(),
+  textType: z.enum(['legal', 'business', 'academic', 'creative', 'technical']),
+  style: z.enum(['formal', 'casual', 'professional', 'persuasive']),
   tags: z.array(z.string()).optional().default([]),
   metadata: z.record(z.any()).optional()
 })
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       offset
     }
 
-    const texts = await superdataClient.getTexts(filters)
+    const texts = await supabaseClient.getTexts(filters)
 
     return NextResponse.json({
       success: true,
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const textData = CreateTextSchema.parse(body)
 
-    const savedText = await superdataClient.saveText(textData)
+    const savedText = await supabaseClient.saveText(textData)
 
     return NextResponse.json({
       success: true,
