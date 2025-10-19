@@ -16,9 +16,12 @@ const GenerateRequestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'your_openai_api_key_here') {
       return NextResponse.json(
-        { success: false, error: 'OpenAI API key לא מוגדר' },
+        { 
+          success: false, 
+          error: 'OpenAI API key לא מוגדר. אנא הוסיפי את המפתח שלך לקובץ .env.local' 
+        },
         { status: 500 }
       )
     }
